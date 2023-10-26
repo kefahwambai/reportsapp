@@ -15,33 +15,31 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    let responseClone;
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('/me', {
+          method: 'GET',
+          headers: {
+            'Content-type': 'application/json',
+          },
+        });
   
-    fetch('/me', {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json',
-      },
-    })
-      .then((response) => {
-        responseClone = response.clone();
-        return response.json();
-      })
-      .then(
-        (user) => {
-          setUser(user);
-        },
-        (rejectionReason) => {
-          console.log('Error parsing JSON from response:', rejectionReason, responseClone);
-          responseClone.text().then(function (bodyText) {
-            console.log('Received the following instead of valid JSON:', bodyText);
-          });
+        if (!response.ok) {
+          // Handle non-successful responses, e.g., unauthorized
+          console.error('Error fetching user data:', response.status, response.statusText);
+          return;
         }
-      )
-      .catch((error) => {
+  
+        const user = await response.json();
+        setUser(user);
+      } catch (error) {
         console.error('Error fetching user data:', error);
-      });
+      }
+    };
+  
+    fetchUserData();
   }, []);
+  
   
   return (
     <div>
