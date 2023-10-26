@@ -27,7 +27,7 @@ function Redflags() {
   
     console.log(formData);
   
-    fetch('/redflags', {
+    fetch('https://ireporter-vndn.onrender.com/redflags', {
       method: 'POST',
       body: formData,
     })

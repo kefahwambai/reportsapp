@@ -15,16 +15,16 @@ function Home(props) {
   useEffect(() => {
     if (user) {
       // Fetch redflags for the user
-      fetch(`/users/${user.id}/redflags`)
+      fetch(`https://ireporter-vndn.onrender.com/users/${user.id}/redflags`)
         .then((response) => response.json())
         .then((redflags) => {
-          // Fetch interventions for the user
-          fetch(`/users/${user.id}/interventions`)
+          
+          fetch(`https://ireporter-vndn.onrender.com/users/${user.id}/interventions`)
             .then((response) => response.json())
             .then((interventions) => {
-              // Combine redflags and interventions into a single array
+              
               const allIssues = [...redflags, ...interventions];
-              // Set the combined array in the state
+              
               setIssues(allIssues);
             })
             .catch((error) => {

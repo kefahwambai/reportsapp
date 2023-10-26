@@ -14,33 +14,28 @@ import AdminHome from './Components/Home/AdminHome';
 function App() {
   const [user, setUser] = useState(null);
 
+
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch('/me', {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json',
-          },
-        });
-  
-        if (!response.ok) {
-          // Handle non-successful responses, e.g., unauthorized
-          console.error('Error fetching user data:', response.status, response.statusText);
-          return;
-        }
-  
-        const user = await response.json();
-        setUser(user);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+    fetch('https://ireporter-vndn.onrender.com/me', {
+      method: 'GET', 
+      headers: {       
+        'Content-type': 'application/json',
       }
-    };
-  
-    fetchUserData();
+    })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('Network response was not ok');
+    })
+    .then((user) => {         
+      setUser(user);          
+    })
+    .catch((error) => {
+      console.error('Error fetching user data:', error);
+    });
   }, []);
-  
-  
+
   return (
     <div>
         <Navbar user={user} setUser={setUser} />

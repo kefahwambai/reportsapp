@@ -10,7 +10,7 @@ function Navbar({ user, setUser}) {
   const navigate = useNavigate(); 
 
     function handleLogoutClick() {
-      fetch('/logout', {
+      fetch('https://ireporter-vndn.onrender.com/logout', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

@@ -52,7 +52,7 @@ export default function SignUp() {
      
     };
 
-    fetch('/signup', {
+    fetch('https://ireporter-vndn.onrender.com/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

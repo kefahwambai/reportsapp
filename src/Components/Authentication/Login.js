@@ -20,7 +20,7 @@ function Login({ setUser }) {
     }
 
 
-    fetch('/login', {
+    fetch('https://ireporter-vndn.onrender.com/login', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
