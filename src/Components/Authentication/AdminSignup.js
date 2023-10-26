@@ -15,12 +15,9 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 
-
-
 const defaultTheme = createTheme();
 
 export default function SignUp() {
- 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,22 +25,22 @@ export default function SignUp() {
   const [id_number, setIdNumber] = useState('');
   const [admin, setAdmin] = useState('');
   const [signupError, setSignupError] = useState('');
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
- 
+
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     if (password !== passwordConfirmation) {
       setSignupError('Password and confirmation do not match.');
       return;
     }
-  
+
     if (id_number.length !== 8) {
       setSignupError('ID number must be 8 digits long.');
       return;
     }
-  
+
     const formData = {
       name,
       email,
@@ -52,23 +49,23 @@ export default function SignUp() {
       id_number,
       admin,
     };
-  
+
     fetch('/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
       body: JSON.stringify(formData),
     })
       .then((response) => {
-        if(!response.ok) {
-          throw new Error('Network response was not ok')
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
-        return response.json()
+        return response.json();
+      })
       .then((user) => {
         if (user) {
-          // console.log("Admin registered")
           setMessage('Account Created');
           setTimeout(() => {
             navigate('/login');
@@ -81,10 +78,10 @@ export default function SignUp() {
         setSignupError('Signup failed');
         console.error(error);
       });
-  });
-  
-  const handleChange = (e) => {    
-    setAdmin(e.target.value );
+  };
+
+  const handleChange = (e) => {
+    setAdmin(e.target.value);
   };
 
   return (
@@ -107,7 +104,9 @@ export default function SignUp() {
             Sign up
           </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }}>
-            {message && (<Alert severity='success' sx={{ mb:2 }}>{message}</Alert>)}
+            {message && <Alert severity="success" sx={{ mb: 2 }}>
+              {message}
+            </Alert>}
             {signupError && (
               <Alert severity="error" sx={{ mb: 2 }}>
                 {signupError}
@@ -123,7 +122,8 @@ export default function SignUp() {
                   name="name"
                   autoComplete="name"
                   value={name}
-                  required onChange={(e) => setName(e.target.value)}
+                  required
+                  onChange={(e) => setName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -135,7 +135,8 @@ export default function SignUp() {
                   name="email"
                   autoComplete="email"
                   value={email}
-                  required onChange={(e) => setEmail(e.target.value)}
+                  required
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -148,20 +149,22 @@ export default function SignUp() {
                   id="password"
                   autoComplete="new-password"
                   value={password}
-                  required onChange={(e) => setPassword(e.target.value)}
+                  required
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  name="password"
-                  label="password"
+                  name="passwordConfirmation"
+                  label="Password Confirmation"
                   type="password"
-                  id="password"
+                  id="passwordConfirmation"
                   autoComplete="new-password-confirmation"
                   value={passwordConfirmation}
-                  required onChange={(e) => setPasswordConfirmation(e.target.value)}
+                  required
+                  onChange={(e) => setPasswordConfirmation(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -174,7 +177,8 @@ export default function SignUp() {
                   id="idNumber"
                   autoComplete="ID Number"
                   value={id_number}
-                  required onChange={(e) => setIdNumber(e.target.value)}
+                  required
+                  onChange={(e) => setIdNumber(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -189,7 +193,7 @@ export default function SignUp() {
                     value="true"
                     control={<Radio />}
                     label="Admin"
-                  />                  
+                  />
                 </RadioGroup>
               </Grid>
             </Grid>
