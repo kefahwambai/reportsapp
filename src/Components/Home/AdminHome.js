@@ -14,13 +14,22 @@ function AdminHome(props) {
 
   useEffect(() => {
     if (user) {
-      
-      Promise.all([fetch(`https://ireporter-vndn.onrender.com/redflags`), fetch(`https://ireporter-vndn.onrender.com/interventions`)])
+      Promise.all([
+        fetch(`https://ireporter-vndn.onrender.com/redflags`),
+        fetch(`https://ireporter-vndn.onrender.com/interventions`),
+      ])
         .then(([redflagsResponse, interventionsResponse]) =>
           Promise.all([redflagsResponse.json(), interventionsResponse.json()])
         )
         .then(([redflags, interventions]) => {
-          
+          // Ensure redflags and interventions are arrays
+          if (!Array.isArray(redflags)) {
+            redflags = [];
+          }
+          if (!Array.isArray(interventions)) {
+            interventions = [];
+          }
+  
           const redflagsWithType = redflags.map((redflag) => ({
             ...redflag,
             type: 'redflag',
@@ -29,8 +38,7 @@ function AdminHome(props) {
             ...intervention,
             type: 'intervention',
           }));
-
-          
+  
           const allIssues = [...redflagsWithType, ...interventionsWithType];
           setIssues(allIssues);
         })
@@ -40,6 +48,7 @@ function AdminHome(props) {
         });
     }
   }, [user]);
+  
 
   const handleEdit = (issue) => {
     setSelectedIssue(issue);
