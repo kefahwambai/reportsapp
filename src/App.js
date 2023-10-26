@@ -14,28 +14,35 @@ import AdminHome from './Components/Home/AdminHome';
 function App() {
   const [user, setUser] = useState(null);
 
-
   useEffect(() => {
+    let responseClone;
+  
     fetch('/me', {
-      method: 'GET', 
-      headers: {       
+      method: 'GET',
+      headers: {
         'Content-type': 'application/json',
-      }
+      },
     })
-    .then((response) => {
-      if (response.ok) {
+      .then((response) => {
+        responseClone = response.clone();
         return response.json();
-      }
-      throw new Error('Network response was not ok');
-    })
-    .then((user) => {         
-      setUser(user);          
-    })
-    .catch((error) => {
-      console.error('Error fetching user data:', error);
-    });
+      })
+      .then(
+        (user) => {
+          setUser(user);
+        },
+        (rejectionReason) => {
+          console.log('Error parsing JSON from response:', rejectionReason, responseClone);
+          responseClone.text().then(function (bodyText) {
+            console.log('Received the following instead of valid JSON:', bodyText);
+          });
+        }
+      )
+      .catch((error) => {
+        console.error('Error fetching user data:', error);
+      });
   }, []);
-
+  
   return (
     <div>
         <Navbar user={user} setUser={setUser} />
