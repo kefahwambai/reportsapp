@@ -44,7 +44,7 @@ export default function SignUp() {
       return;
     }
 
-    return dispatch(sessionActions.signup({ name, email, password }))    
+    return dispatch(sessionActions.signup({ name, email, password, passwordConfirmation, id_number }))    
     .catch(async (res) => {
       const data = await res.json();
       setMessage('Account Created')

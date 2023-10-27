@@ -27,11 +27,11 @@ const renderApplication = () => {
   );
 };
 
-if (
-  sessionStorage.getItem('currentUser') === null ||
-  sessionStorage.getItem('X-CSRF-Token') === null
-) {
-  store.dispatch(sessionActions.restoreSession()).then(renderApplication);
-} else {
+try {
+  const response = await store.dispatch(sessionActions.restoreSession());
   renderApplication();
+} catch (error) {
+  console.error('Error fetching session data:', error);
+  
 }
+

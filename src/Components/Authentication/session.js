@@ -48,13 +48,36 @@ export const logout = () => async (dispatch) => {
 };
 
 export const signup = (user) => async (dispatch) => {
-  const { name, email, password } = user;
+  const { name, email, password, passwordConfirmation, id_number  } = user;
   const res = await csrfFetch("https://ireporter-vndn.onrender.com/signup", {
     method: "POST",
     body: JSON.stringify({
       name,
       email,
       password,
+      passwordConfirmation,
+      id_number      
+    })
+  });
+  console.log("Response status:", res.status);
+  const text = await res.text();
+  // console.log("Response text:", text);
+  const data = await res.json();
+  // console.log("Response JSON data:", data); 
+  return res;
+};
+
+export const adminSignup = (user) => async (dispatch) => {
+  const { name, email, password, passwordConfirmation, id_number, admin } = user;
+  const res = await csrfFetch("https://ireporter-vndn.onrender.com/signup", {
+    method: "POST",
+    body: JSON.stringify({
+      name,
+      email,
+      password,
+      passwordConfirmation,
+      id_number,
+      admin,
       
     })
   });
@@ -90,7 +113,7 @@ export const ForgotPassword = (user) => async (dispatch) => {
 
 
 export const restoreSession = () => async (dispatch) => {
-    const res = await csrfFetch("api/session");
+    const res = await csrfFetch("https://ireporter-vndn.onrender.com/session");
     storeCSRFToken(res);
     const data = await res.json();
     storeCurrentUser(data.name);
