@@ -23,19 +23,19 @@ export const getUser = userId => ({users}) => users ? users[userId] : null;
 export const getUsers = ({users}) => users ? Object.values(users) : [];
 
 export const fetchUser = userId => async dispatch => {
-    const res = await csrfFetch(`/users/${userId}`);
+    const res = await csrfFetch(`https://ireporter-vndn.onrender.com/users/${userId}`);
     const data = await res.json();
     dispatch(receiveUser(data.user));
 };
 
 export const fetchUsers = () => async dispatch => {
-    const res = await csrfFetch(`/users`);
+    const res = await csrfFetch(`https://ireporter-vndn.onrender.com/users`);
     const data = await res.json();
     dispatch(receiveUsers(data));
 };
 
 export const deleteUser = userId => async dispatch => {
-    await csrfFetch(`/users${userId}`, {method: "DELETE"});
+    await csrfFetch(`https://ireporter-vndn.onrender.com/users${userId}`, {method: "DELETE"});
     dispatch(removeUser(userId));
 };
 
