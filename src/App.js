@@ -22,13 +22,14 @@ function App() {
   return (
     <div>
         <Navbar />
-        <Routes>          
-            <Route path="/home" element={<Home  />} />
+        <Routes>
+            <Route path="/" element={<Header />} />            
             {sessionUser ? (
           <>
             <Route path="/reports" element={<Complaints />} />
-            <Route path="/admin" element={<AdminHome />} />      
-            <Route path="/" element={<Header />} />
+            <Route path="/admin" element={<AdminHome />} /> 
+            <Route path="/home" element={<Home  />} />     
+            
           </>
         ) : (
           <>

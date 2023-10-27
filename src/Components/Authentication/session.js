@@ -26,17 +26,29 @@ const storeCurrentUser = (user) => {
 };
 
 export const login = (user) => async (dispatch) => {
-  const { email, password } = user;
-  const res = await csrfFetch("https://ireporter-vndn.onrender.com/login", {
-    method: "POST",
-    body: JSON.stringify({ email, password })
-  });
-  const data = await res.json();
-  // console.log(data)
-  storeCurrentUser(data.name);
-  dispatch(setCurrentUser(data.name));
-  return res;
+  try {
+    const { email, password } = user;
+    const res = await csrfFetch("https://ireporter-vndn.onrender.com/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      storeCurrentUser(data.name);
+      dispatch(setCurrentUser(data.name));
+      return res;
+    } else {
+      // Handle non-200 status codes, e.g., unauthorized access
+      console.error('Login failed:', res.status, res.statusText);
+      // Handle the error, e.g., log or show an error message to the user
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    // Handle other errors, e.g., network issues
+  }
 };
+
 
 export const logout = () => async (dispatch) => {
     const res = await csrfFetch("https://ireporter-vndn.onrender.com/logout", {
