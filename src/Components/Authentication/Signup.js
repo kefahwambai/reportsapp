@@ -14,6 +14,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
+import { useDispatch, useSelector } from "react-redux";
+import * as sessionActions from "./session";
+
 
 
 const defaultTheme = createTheme();
@@ -27,55 +30,32 @@ export default function SignUp() {
   const [signupError, setSignupError] = useState('');
   const navigate = useNavigate();
   const [message, setMessage] = useState('')
+  const sessionUser = useSelector(state => state.session.user);
+  const [showPassword, setShowPassword] = useState('');
+  const dispatch = useDispatch();
+ 
   
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== passwordConfirmation) {
-      setSignupError('Password and confirmation do not match.');
+      setSignupError("Password and confirmation do not match.");
       return;
     }
 
-   
-    if (id_number.length !== 8) {
-      setSignupError('ID number must be 8 digits long.');
-      return;
-    }
+    return dispatch(sessionActions.signup({ name, email, password }))    
+    .catch(async (res) => {
+      const data = await res.json();
+      setMessage('Account Created')
+      setTimeout(() => {
+        navigate('/login'); 
+      }, 5678);
+      if (data && data.errors){
+        signupError(data.errors);
+      }
+    });
 
-    const formData = {
-      name,
-      email,
-      password,
-      passwordConfirmation,
-      id_number,
-     
-    };
-
-    fetch('https://ireporter-vndn.onrender.com/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((user) => {
-        if (user) {
-          // console.log("Userregistered")          
-          setMessage('Account Created');
-          setTimeout(() => {
-            navigate('/login');
-          }, 1234);
-        } else {
-          setSignupError(user.error);
-        }
-      })
-      .catch((error) => {
-        setSignupError('Signup failed');
-        console.error(error);
-      });
   };
 
  

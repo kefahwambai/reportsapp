@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
+import { useDispatch, useSelector } from "react-redux";
+import * as sessionActions from "./session";
+
 
 function Login({ setUser }) {
   const [email, setEmail] = useState('');
@@ -10,47 +13,52 @@ function Login({ setUser }) {
   const navigate = useNavigate(); 
   const [message, setMessage] = useState('');
   const [loginError, setLoginError] = useState('');
+  const dispatch = useDispatch();
+  const [rememberMe, setRememberMe] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false); 
+  const sessionUser = useSelector(state => state.session.user);
 
-  const handleSubmit = (event) => {
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const formData = {
-      email,
-      password
-    }
-
-
-    fetch('https://ireporter-vndn.onrender.com/login', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-     
-      },
-      body: JSON.stringify(formData),
-    })
-    .then((res) => res.json())
-    .then((user) => {
-      // console.log(user.admin);
-      if (user.admin === true) { // Check for an appropriate user identifier, e.g., 'id'
-        // console.log('User data exists in the response:', data.user);
-        setMessage("Login Successful")
-        setUser(user);        
-        navigate('/admin');
-
-      } else if (user) {
-
-        setUser(user);
-        navigate('/home');
-        
+  
+    try {
+      const response = await dispatch(sessionActions.login({ email, password }));
+      const user = response.data.user; // Assuming user data is in the response
+  
+      if (user) {
+        if (user.admin === true) {
+          setMessage("Login Successful");
+          setUser(user);
+          navigate('/admin');
+        } else {
+          setMessage("Login Successful");
+          setUser(user);
+          navigate('/home');
+        }
       } else {
-        console.log('User data is missing in the response.');
+        setLoginError('User not found')
+        console.window(setLoginError)
       }
-    })
-    .catch((error) => {
-      setLoginError(error)
-      console.log('Error:', error);
-    });
-}      
+  
+    } catch (error) {
+      
+      console.error('Login error:', error);
+      if (error instanceof Error) {
+        
+        try {
+          const data = await error.json();
+          if (data && data.errors) {
+            setLoginError(data.errors);
+          }
+        } catch (error) {
+          
+          console.error('Error parsing JSON:', error);
+        }
+      }
+    }
+  };
+     
 
   return (
     <div className="testlog">
@@ -86,7 +94,7 @@ function Login({ setUser }) {
           <p>Don't have an account? <Link to="/signup">Signup</Link>  </p>          
         </div>
         <div className="col d-flex justify-content-end">                  
-          <p><Link to="/signup">Forgot Password</Link></p>          
+          <p><Link to="/forgotpassword">Forgot Password ?</Link></p>          
         </div>
       </div>
 
