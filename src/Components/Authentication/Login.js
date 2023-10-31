@@ -24,41 +24,44 @@ function Login({ setUser }) {
   
     try {
       const response = await dispatch(sessionActions.login({ email, password }));
-      console.log(response)
-      const user = response.data.user; 
   
-      if (user) {
-        if (user.admin === true) {
-          setMessage("Login Successful");
-          setUser(user);
-          navigate('/admin');
+      if (response) {
+        if (response.user) {
+          if (response.user.admin === true) {
+            setMessage("Login Successful");
+            setUser(response.user);
+            navigate('/admin');
+          } else {
+            setMessage("Login Successful");
+            setUser(response.user);
+            navigate('/home');
+          }
         } else {
-          setMessage("Login Successful");
-          setUser(user);
-          navigate('/home');
+          setLoginError('User not found');
+          // Optionally display the error message in your UI
         }
       } else {
-        setLoginError('User not found')
-        console.window(setLoginError)
+        setLoginError('User not found');
+        // Optionally display the error message in your UI
       }
   
     } catch (error) {
-      
       console.error('Login error:', error);
       if (error instanceof Error) {
-        
         try {
           const data = await error.json();
           if (data && data.errors) {
             setLoginError(data.errors);
+            // Optionally display the error message in your UI
           }
         } catch (error) {
-          
           console.error('Error parsing JSON:', error);
+          // Handle JSON parsing error, and optionally display an error message in your UI
         }
       }
     }
   };
+  
      
 
   return (

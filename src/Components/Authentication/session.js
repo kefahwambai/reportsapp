@@ -37,15 +37,17 @@ export const login = (user) => async (dispatch) => {
       const data = await res.json();
       storeCurrentUser(data.name);
       dispatch(setCurrentUser(data.name));
-      return res;
+      return data; // Return the user data instead of the response
     } else {
-      // Handle non-200 status codes, e.g., unauthorized access
-      console.error('Login failed:', res.status, res.statusText);
+      const errorData = await res.json(); // Parse the error response
+      console.error('Login failed:', res.status, res.statusText, errorData);
       // Handle the error, e.g., log or show an error message to the user
+      throw new Error(`Login failed: ${errorData.message}`); // Throw a custom error
     }
   } catch (error) {
     console.error('Login error:', error);
     // Handle other errors, e.g., network issues
+    throw error; // Rethrow the error for further handling in your handleSubmit function
   }
 };
 
