@@ -28,12 +28,12 @@ function Login({ setUser }) {
       if (response) {        
         if (response.admin === true) {
           setMessage("Login Successful");
-          setUser(response.user);
+          setUser(response);
           navigate('/admin');
        
       } else {
         setMessage("Login Successful");
-        setUser(response.user);
+        setUser(response);
         navigate('/home');
        
       }
