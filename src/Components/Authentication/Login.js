@@ -39,21 +39,18 @@ function Login({ setUser }) {
       }
     }
   
-    } catch (error) {
-      console.error('Login error:', error);
-      if (error instanceof Error) {
-        try {
-          const data = await error.json();
-          if (data && data.errors) {
-            setLoginError(data.errors);
-            
-          }
-        } catch (error) {
-          console.error('Error parsing JSON:', error);
-          
-        }
-      }
+  } catch (error) {
+    console.error('Error parsing JSON:', error);
+   
+    if (error.response && error.response.status === 422) {
+      
+      console.error('Unprocessable Entity', error);
+      
+    } else {
+      console.error('Other error occurred', error);
+     
     }
+  }
   };
   
      
