@@ -35,11 +35,11 @@ function Navbar() {
           const data = await error.json();
           if (data && data.errors) {
             setLoginError(data.errors);
-            // Optionally display the error message in your UI
+           
           }
         } catch (error) {
           console.error('Error parsing JSON:', error);
-          // Handle JSON parsing error, and optionally display an error message in your UI
+          
         }
       }
     }
