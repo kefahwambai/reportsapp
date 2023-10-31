@@ -42,16 +42,9 @@ function Login({ setUser }) {
   } catch (error) {
     console.error('Error parsing JSON:', error);
    
-    if (error.response && error.response.status === 422) {
-      
-      console.error('Unprocessable Entity', error);
-      
-    } else {
-      console.error('Other error occurred', error);
-     
-    }
+   
   }
-  };
+};
   
      
 
