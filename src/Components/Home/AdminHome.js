@@ -9,13 +9,14 @@ function AdminHome() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const sessionUser = useSelector((state) => state.session.user);
-  const user = sessionUser ? sessionUser.id : '';
+  
   const [showDescription, setShowDescription] = useState(false);
   const [currentDescription, setCurrentDescription] = useState('');
   const [selectedIssue, setSelectedIssue] = useState(null);
 
   useEffect(() => {
-    if (user) {
+    if (sessionUser) {
+      
       Promise.all([
         fetch(`https://ireporter-vndn.onrender.com/redflags`),
         fetch(`https://ireporter-vndn.onrender.com/interventions`),
@@ -49,7 +50,7 @@ function AdminHome() {
           console.error('Error fetching issues:', error);
         });
     }
-  }, [user]);
+  }, [sessionUser]);
   
 
   const handleEdit = (issue) => {
@@ -108,7 +109,7 @@ function AdminHome() {
     <div>
       <div className="adminhmepage">
         <div className="adminhmepgecontent">
-          <h1>Welcome {user ? user.name : 'Guest'}</h1>
+          <h1>Welcome {sessionUser ? sessionUser.name : 'Guest'}</h1>
         </div>
         <div className="admindatatable">
           <table className="admintable table-hover">

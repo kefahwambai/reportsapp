@@ -35,6 +35,7 @@ export const login = (user) => async (dispatch) => {
 
     if (res.ok) {
       const data = await res.json();
+      console.log(data)
       storeCurrentUser(data);
       dispatch(setCurrentUser(data));
       return data; 
