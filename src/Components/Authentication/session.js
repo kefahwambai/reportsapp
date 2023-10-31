@@ -35,8 +35,8 @@ export const login = (user) => async (dispatch) => {
 
     if (res.ok) {
       const data = await res.json();
-      storeCurrentUser(data.name);
-      dispatch(setCurrentUser(data.name));
+      storeCurrentUser(data);
+      dispatch(setCurrentUser(data));
       return data; 
     } else {
       const errorData = await res.json(); 
@@ -128,9 +128,9 @@ export const restoreSession = () => async (dispatch) => {
     const res = await csrfFetch("https://ireporter-vndn.onrender.com/session");
     storeCSRFToken(res);
     const data = await res.json();
-    storeCurrentUser(data);
-    dispatch(setCurrentUser(data));
-    return data;
+    storeCurrentUser(data.name);
+    dispatch(setCurrentUser(data.name));
+    return res;
 };
 
 const initialState = { 
