@@ -2,22 +2,17 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import sessionReducer from './session';
 import usersReducer from './user';
+import logger from 'redux-logger'; // Import the logger
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   users: usersReducer
 });
 
-let enhancer;
+const composeEnhancers =
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-if (process.env.NODE_ENV === 'development') {
-  enhancer = applyMiddleware(thunk);
-} else {
-  const logger = require('redux-logger').default;
-  const composeEnhancers =
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-  enhancer = composeEnhancers(applyMiddleware(thunk, logger));
-}
+const enhancer = composeEnhancers(applyMiddleware(thunk, logger)); // Include the logger
 
 const configureStore = (preloadedState) => {
   return createStore(rootReducer, preloadedState, enhancer);
