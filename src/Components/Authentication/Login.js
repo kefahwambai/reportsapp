@@ -28,13 +28,11 @@ function Login({ setUser }) {
       console.log(response)
       if (response) {        
         if (response.admin === true) {
-          setMessage("Login Successful");
-          setUser(response);
+          setMessage("Login Successful");          
           navigate('/admin');
        
       } else {
-        setMessage("Login Successful");
-        setUser(response);
+        setMessage("Login Successful");        
         navigate('/home');
        
       }
