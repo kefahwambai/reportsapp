@@ -24,7 +24,8 @@ function Login({ setUser }) {
   
     try {
       const response = await dispatch(sessionActions.login({ email, password }));
-      const user = response.data.user; // Assuming user data is in the response
+      console.log(response)
+      const user = response.data.user; 
   
       if (user) {
         if (user.admin === true) {
