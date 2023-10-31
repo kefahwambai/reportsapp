@@ -15,8 +15,8 @@ function AdminHome(props) {
   useEffect(() => {
     if (user) {
       Promise.all([
-        fetch(`https://ireporter-vndn.onrender.com/redflags`),
-        fetch(`https://ireporter-vndn.onrender.com/interventions`),
+        fetch(`https://ireporter.onrender.com/redflags`),
+        fetch(`https://ireporter.onrender.com/interventions`),
       ])
         .then(([redflagsResponse, interventionsResponse]) =>
           Promise.all([redflagsResponse.json(), interventionsResponse.json()])
@@ -63,8 +63,8 @@ function AdminHome(props) {
   
     const endpoint =
       issue.type === 'redflag'
-        ? `https://ireporter-vndn.onrender.com/redflags/${issue.id}`
-        : `https://ireporter-vndn.onrender.com/interventions/${issue.id}`;
+        ? `https://ireporter.onrender.com/redflags/${issue.id}`
+        : `https://ireporter.onrender.com/interventions/${issue.id}`;
   
     fetch(endpoint, {
       method: 'PUT',

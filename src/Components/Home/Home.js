@@ -15,11 +15,11 @@ function Home(props) {
   useEffect(() => {
     if (user) {
       // Fetch redflags for the user
-      fetch(`https://ireporter-vndn.onrender.com/users/${user.id}/redflags`)
+      fetch(`https://ireporter.onrender.com/users/${user.id}/redflags`)
         .then((response) => response.json())
         .then((redflags) => {
           
-          fetch(`https://ireporter-vndn.onrender.com/users/${user.id}/interventions`)
+          fetch(`https://ireporter.onrender.com/users/${user.id}/interventions`)
             .then((response) => response.json())
             .then((interventions) => {
               

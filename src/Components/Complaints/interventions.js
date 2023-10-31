@@ -30,7 +30,7 @@ function Intervention() {
   
     console.log(formData);
   
-    fetch('https://ireporter-vndn.onrender.com/interventions', {
+    fetch('https://ireporter.onrender.com/interventions', {
       method: 'POST',
       body: formData,
     })
