@@ -19,9 +19,9 @@ const storeCSRFToken = (res) => {
 
 const storeCurrentUser = (user) => {
   if (user) {
-    sessionStorage.setItem("currentUser", JSON.stringify(user));
+    localStorage.setItem("currentUser", JSON.stringify(user));
   } else {
-    sessionStorage.removeItem("currentUser");
+    localStorage.removeItem("currentUser");
   }
 };
 
@@ -135,7 +135,7 @@ export const restoreSession = () => async (dispatch) => {
 };
 
 const initialState = { 
-  user: JSON.parse(sessionStorage.getItem("currentUser"))
+  user: JSON.parse(localStorage.getItem("currentUser"))
 };
 
 const sessionReducer = (state = initialState, action) => {
@@ -145,6 +145,7 @@ const sessionReducer = (state = initialState, action) => {
       newState.user = action.user; 
       return newState;
     case REMOVE_CURRENT_USER:
+      localStorage.removeItem("currentUser");
       return { ...state, user: null };
     default:
       return state;  }
