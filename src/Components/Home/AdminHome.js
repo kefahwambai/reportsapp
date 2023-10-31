@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './Home.css';
 import Alert from '@mui/material/Alert';
 import './admin.css';
+import { useSelector } from "react-redux";
 
-function AdminHome(props) {
+function AdminHome() {
   const [issues, setIssues] = useState([]);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const user = props.user;
+  const sessionUser = useSelector((state) => state.session.user);
+  const user = sessionUser ? sessionUser.id : '';
   const [showDescription, setShowDescription] = useState(false);
   const [currentDescription, setCurrentDescription] = useState('');
   const [selectedIssue, setSelectedIssue] = useState(null);
@@ -15,8 +17,8 @@ function AdminHome(props) {
   useEffect(() => {
     if (user) {
       Promise.all([
-        fetch(`https://ireporter.onrender.com/redflags`),
-        fetch(`https://ireporter.onrender.com/interventions`),
+        fetch(`https://ireporter-vndn.onrender.com/redflags`),
+        fetch(`https://ireporter-vndn.onrender.com/interventions`),
       ])
         .then(([redflagsResponse, interventionsResponse]) =>
           Promise.all([redflagsResponse.json(), interventionsResponse.json()])
@@ -63,8 +65,8 @@ function AdminHome(props) {
   
     const endpoint =
       issue.type === 'redflag'
-        ? `https://ireporter.onrender.com/redflags/${issue.id}`
-        : `https://ireporter.onrender.com/interventions/${issue.id}`;
+        ? `https://ireporter-vndn.onrender.com/redflags/${issue.id}`
+        : `https://ireporter-vndn.onrender.com/interventions/${issue.id}`;
   
     fetch(endpoint, {
       method: 'PUT',

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./intervention.css";
 import Alert from "@mui/material/Alert";
+import { useSelector } from "react-redux";
+
+
 
 function Intervention() {
   const [title, setTitle] = useState('');
@@ -10,8 +13,9 @@ function Intervention() {
   const [government_agency, setGovernmentAgencies] = useState("");
   const [image, setImage] = useState('');
   const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const [user, setUser] = useState('');
+  const [error, setError] = useState(''); 
+  const sessionUser = useSelector((state) => state.session.user);
+  const user = sessionUser ? sessionUser.id : '';
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -30,7 +34,7 @@ function Intervention() {
   
     console.log(formData);
   
-    fetch('https://ireporter.onrender.com/interventions', {
+    fetch('https://ireporter-vndn.onrender.com/interventions', {
       method: 'POST',
       body: formData,
     })
@@ -42,36 +46,10 @@ function Intervention() {
       .catch((err) => {        
         setError(err.message);
       });
-  }
+  }  
 
   useEffect(() => {
-    fetch('/me', {
-      method: 'GET', 
-      headers: {       
-        'Content-type': 'application/json',
-      }
-    })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok');
-    })
-    .then((data) => {               
-      const user = data.id;
-      setUser(user) 
-      
-        
-    })
-    .catch((error) => {
-      console.error('Error fetching user data:', error);
-    });
-  }, []);
-  
-  
-
-  useEffect(() => {
-    fetch("/government_agencies")
+    fetch("https://ireporter-vndn.onrender.com/government_agencies")
       .then((response) => response.json())
       .then((agencies) => {
         // Ensure agencies is an array before setting it

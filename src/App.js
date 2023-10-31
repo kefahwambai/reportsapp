@@ -10,14 +10,10 @@ import Home from './Components/Home/Home';
 import Complaints from './Components/Complaints/complaints';
 import AdminHome from './Components/Home/AdminHome';
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import ForgotPassword from "./Components/Authentication/ForgotPassword";
 
 function App() {
-  const sessionUser = useSelector((state) => state.session.user);
-
-
-  
+  const sessionUser = useSelector((state) => state.session.user);  
 
   return (
     <div>

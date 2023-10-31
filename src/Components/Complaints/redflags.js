@@ -1,6 +1,7 @@
 import { use } from "chai";
 import React, { useState, useEffect } from "react";
 import Alert from "@mui/material/Alert";
+import { useSelector } from "react-redux";
 
 
 
@@ -11,7 +12,8 @@ function Redflags() {
   const [ description, setDescription] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const [user, setUser] = useState('');
+  const sessionUser = useSelector((state) => state.session.user);
+  const user = sessionUser ? sessionUser.id : '';
 
   function handleSubmit(event) {
     event.preventDefault();   
@@ -27,7 +29,7 @@ function Redflags() {
   
     console.log(formData);
   
-    fetch('https://ireporter.onrender.com/redflags', {
+    fetch('https://ireporter-vndn.onrender.com/redflags', {
       method: 'POST',
       body: formData,
     })
@@ -41,29 +43,6 @@ function Redflags() {
       });
   }
 
-  useEffect(() => {
-    fetch('/me', {
-      method: 'GET', 
-      headers: {       
-        'Content-type': 'application/json',
-      }
-    })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok');
-    })
-    .then((data) => {               
-      const user = data.id;
-      setUser(user) 
-      
-        
-    })
-    .catch((error) => {
-      console.error('Error fetching user data:', error);
-    });
-  }, []);
 
   return (
       <div>
