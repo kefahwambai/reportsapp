@@ -37,17 +37,15 @@ export const login = (user) => async (dispatch) => {
       const data = await res.json();
       storeCurrentUser(data.name);
       dispatch(setCurrentUser(data.name));
-      return data; // Return the user data instead of the response
+      return data; \
     } else {
-      const errorData = await res.json(); // Parse the error response
-      console.error('Login failed:', res.status, res.statusText, errorData);
-      // Handle the error, e.g., log or show an error message to the user
-      throw new Error(`Login failed: ${errorData.message}`); // Throw a custom error
+      const errorData = await res.json(); 
+      console.error('Login failed:', res.status, res.statusText, errorData);      
+      throw new Error(`Login failed: ${errorData.message}`); 
     }
   } catch (error) {
-    console.error('Login error:', error);
-    // Handle other errors, e.g., network issues
-    throw error; // Rethrow the error for further handling in your handleSubmit function
+    console.error('Login error:', error);    
+    throw error; 
   }
 };
 
@@ -143,13 +141,13 @@ const sessionReducer = (state = initialState, action) => {
   const newState = {...state}
   switch (action.type) {
     case SET_CURRENT_USER:
-      newState.user = action.name;
+      newState.user = action.user; 
       return newState;
     case REMOVE_CURRENT_USER:
       return { ...state, user: null };
     default:
-      return state;
-  }
+      return state;  }
+  
 };
 
 export default sessionReducer;
