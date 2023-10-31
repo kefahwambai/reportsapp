@@ -24,7 +24,8 @@ function Login({ setUser }) {
   
     try {
       const response = await dispatch(sessionActions.login({ email, password }));
-  
+      
+      console.log(response)
       if (response) {        
         if (response.admin === true) {
           setMessage("Login Successful");
