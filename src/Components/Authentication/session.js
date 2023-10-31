@@ -37,7 +37,7 @@ export const login = (user) => async (dispatch) => {
       const data = await res.json();
       storeCurrentUser(data.name);
       dispatch(setCurrentUser(data.name));
-      return data; \
+      return data; 
     } else {
       const errorData = await res.json(); 
       console.error('Login failed:', res.status, res.statusText, errorData);      
