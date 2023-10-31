@@ -28,7 +28,7 @@ const renderApplication = () => {
 };
 
 try {
-  const response = await store.dispatch(sessionActions.restoreSession());
+  const response = await store.dispatch(sessionActions.restoreSession()).then(renderApplication);;
   renderApplication();
 } catch (error) {
   console.error('Error fetching session data:', error);
