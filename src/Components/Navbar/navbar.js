@@ -3,7 +3,7 @@ import { useSelector, useDispatch, useState } from "react-redux";
 import { Link } from 'react-router-dom';
 import  "./navbar.css"
 import { useNavigate } from "react-router-dom";
-import * as sessionActions from "./session";
+import * as sessionActions from "../Authentication/session";
 import Alert from '@mui/material/Alert';
 
 
