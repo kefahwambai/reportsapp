@@ -31,6 +31,10 @@ export const login = (user) => async (dispatch) => {
     const res = await csrfFetch("https://ireporter-vndn.onrender.com/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
+      headers: {
+        
+        'Content-Type': "application/json"
+      }
       
     });
 
