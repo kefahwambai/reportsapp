@@ -5,7 +5,7 @@ export default async function csrfFetch(url, options = {}) {
   if (options.method.toUpperCase() !== 'GET') {
     options.headers['Content-Type'] = 'application/json';
     // Use sessionStorage token if available, otherwise use the meta tag token
-    options.headers['X-CSRF-Token'] = sessionStorage.getItem('X-CSRF-Token') || document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    options.headers['X-CSRF-Token'] = sessionStorage.getItem('X-CSRF-Token') || document.querySelector('meta[name="csrf-token"]');
   }
 
   const res = await fetch(url, options);
