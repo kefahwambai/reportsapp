@@ -28,7 +28,7 @@ const storeCurrentUser = (user) => {
 export const login = (user) => async (dispatch) => {
   try {
     const { email, password } = user;
-    const res = await ("https://ireporter-vndn.onrender.com/login", {
+    const res = await csrfFetch("https://ireporter-vndn.onrender.com/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
       
