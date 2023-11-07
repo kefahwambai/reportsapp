@@ -34,7 +34,7 @@ function Intervention() {
   
     console.log(formData);
   
-    fetch('https://ireporter-vndn.onrender.com/interventions', {
+    fetch('https://ireporter-th6z.onrender.com/interventions', {
       method: 'POST',
       body: formData,
     })
@@ -49,7 +49,7 @@ function Intervention() {
   }  
 
   useEffect(() => {
-    fetch("https://ireporter-vndn.onrender.com/government_agencies")
+    fetch("https://ireporter-th6z.onrender.com/government_agencies")
       .then((response) => response.json())
       .then((agencies) => {
         // Ensure agencies is an array before setting it

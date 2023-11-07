@@ -17,11 +17,11 @@ function Home() {
   useEffect(() => {
     if (user) {
       // Fetch redflags for the user
-      fetch(`https://ireporter-vndn.onrender.com/users/${user.id}/redflags`)
+      fetch(`https://ireporter-th6z.onrender.com/users/${user.id}/redflags`)
         .then((response) => response.json())
         .then((redflags) => {
           
-          fetch(`https://ireporter-vndn.onrender.com/users/${user.id}/interventions`)
+          fetch(`https://ireporter-th6z.onrender.com/users/${user.id}/interventions`)
             .then((response) => response.json())
             .then((interventions) => {
               
@@ -49,7 +49,7 @@ function Home() {
     const confirmDelete = window.confirm('Are you sure you want to delete this record?');
 
     if (confirmDelete) {
-      fetch(`https://ireporter-vndn.onrender.com/redflags/${issueId}`, {
+      fetch(`https://ireporter-th6z.onrender.com/redflags/${issueId}`, {
         method: 'DELETE',
       })
         .then((response) => {
