@@ -75,18 +75,19 @@ export const signup = (user) => async (dispatch) => {
 };
 
 export const adminSignup = (user) => async (dispatch) => {
-  const { name, email, password, passwordConfirmation, id_number, admin  } = user;
+  const requestData = {
+    user: {
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      passwordConfirmation: user.passwordConfirmation,
+      id_number: user.id_number,
+      admin: user.admin,
+    },
+  };
   const res = await  csrfFetch('https://ireporter-th6z.onrender.com/signup', {
     method: "POST",
-    body: JSON.stringify({
-      name,
-      email,
-      password,
-      passwordConfirmation,
-      id_number,
-      admin,
-      
-    })
+    body: JSON.stringify(requestData)
   });
   if (res.ok) {
     console.log("Response status:", res.status);
