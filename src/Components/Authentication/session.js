@@ -1,4 +1,6 @@
 import csrfFetch from "../Authentication/csfr";
+import { getStoredAuthToken, setStoredAuthToken } from './authUtils';
+
 
 const SET_CURRENT_USER = 'session/SET_CURRENT_USER';
 const REMOVE_CURRENT_USER = 'session/REMOVE_CURRENT_USER';
@@ -12,62 +14,46 @@ const removeCurrentUser = () => ({
   type: REMOVE_CURRENT_USER
 });
 
-const storeCSRFToken = (res) => {
-  const csrfToken = res.headers.get("X-CSRF-Token");
-  if (csrfToken) sessionStorage.setItem("X-CSRF-Token", csrfToken);
-};
-
-const storeCurrentUser = (user) => {
-  if (user) {
-    localStorage.setItem("currentUser", JSON.stringify(user));
-  } else {
-    localStorage.removeItem("currentUser");
-  }
-};
 
 export const login = (user) => async (dispatch) => {
   try {
     const { email, password } = user;
-    const res = await csrfFetch("https://ireporter-th6z.onrender.com/login", {
-      method: "POST",
+    const res = await  csrfFetch('https://ireporter-th6z.onrender.com/login', {
+      method: 'POST',
       body: JSON.stringify({ email, password }),
       headers: {
-        
-        'Content-Type': "application/json"
-      }
-      
+        'Content-Type': 'application/json',
+      },
     });
 
     if (res.ok) {
-      const data = await res.json();
-      console.log(data)
-      storeCurrentUser(data);
-      dispatch(setCurrentUser(data));
-      return data; 
+      const { token, user } = await res.json();
+      // Store the JWT token in local storage or cookies
+      setStoredAuthToken(token);
+      dispatch(setCurrentUser(user));
+      return user;
     } else {
-      const errorData = await res.json(); 
-      console.error('Login failed:', res.status, res.statusText, errorData);      
-      throw new Error(`Login failed: ${errorData.message}`); 
+      const errorData = await res.json();
+      console.error('Login failed:', res.status, res.statusText, errorData);
+      throw new Error(`Login failed: ${errorData.message}`);
     }
   } catch (error) {
-    console.error('Login error:', error);    
-    throw error; 
+    console.error('Login error:', error);
+    throw error;
   }
 };
 
 
-export const logout = () => async (dispatch) => {
-    const res = await csrfFetch("https://ireporter-th6z.onrender.com/logout", {
-      method: "DELETE"
-    });
-    storeCurrentUser(null);
-    dispatch(removeCurrentUser());
-    return res;
+export const logout = () => (dispatch) => {
+ 
+  setStoredAuthToken(null);
+  dispatch(removeCurrentUser());
+  return Promise.resolve(); // Assuming logout is always successful
 };
 
 export const signup = (user) => async (dispatch) => {
   const { name, email, password, passwordConfirmation, id_number  } = user;
-  const res = await csrfFetch("https://ireporter-th6z.onrender.com/signup", {
+  const res = await  csrfFetch('https://ireporter-th6z.onrender.com/signup', {
     method: "POST",
     body: JSON.stringify({
       name,
@@ -77,17 +63,20 @@ export const signup = (user) => async (dispatch) => {
       id_number      
     })
   });
-  console.log("Response status:", res.status);
-  const text = await res.text();
-  // console.log("Response text:", text);
-  const data = await res.json();
-  // console.log("Response JSON data:", data); 
-  return res;
+  if (res.ok) {
+    console.log("Response status:", res.status);
+
+    return res;
+  } else {
+    const errorData = await res.json();
+    console.error('Signup failed:', res.status, res.statusText, errorData);
+    throw Error(`Signup failed: ${errorData.message}`);
+  }
 };
 
 export const adminSignup = (user) => async (dispatch) => {
-  const { name, email, password, passwordConfirmation, id_number, admin } = user;
-  const res = await csrfFetch("https://ireporter-th6z.onrender.com/signup", {
+  const { name, email, password, passwordConfirmation, id_number, admin  } = user;
+  const res = await  csrfFetch('https://ireporter-th6z.onrender.com/signup', {
     method: "POST",
     body: JSON.stringify({
       name,
@@ -99,45 +88,66 @@ export const adminSignup = (user) => async (dispatch) => {
       
     })
   });
-  console.log("Response status:", res.status);
-  const text = await res.text();
-  // console.log("Response text:", text);
-  const data = await res.json();
-  // console.log("Response JSON data:", data); 
-  return res;
+  if (res.ok) {
+    console.log("Response status:", res.status);
+
+    return res;
+  } else {
+    const errorData = await res.json();
+    console.error('Signup failed:', res.status, res.statusText, errorData);
+    throw Error(`Signup failed: ${errorData.message}`);
+  }
 };
 
-export const ForgotPassword = (user) => async (dispatch) => {
-  const { email } = user;
-
-  try {    
-    const res = await csrfFetch("https://ireporter-th6z.onrender.com/password_resets", {
-      method: "POST",
+export const requestPasswordReset = async (email) => {
+  try {
+    const response = await  csrfFetch('https://ireporter-th6z.onrender.com/password_resets', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": csrfFetch,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email }),
     });
-    if (!res.ok) {     
-      throw new Error("Password reset request failed");
-    }   
-    const data = await res.json();
-    
+
+    if (response.ok) {
+      console.log("Response status:", response.status);
+    } else {
+      const errorData = await response.json();
+      console.error('Signup failed:', response.status, response.statusText, errorData);
+      throw Error(`Signup failed: ${errorData.message}`);
+    }
   } catch (error) {
-    console.error("Password reset error:", error);
+    console.error('Password reset request failed:', error);
   }
 };
 
 
+
 export const restoreSession = () => async (dispatch) => {
-    const res = await csrfFetch("https://ireporter-th6z.onrender.com/session");
-    storeCSRFToken(res);
-    const data = await res.json();
-    storeCurrentUser(data.name);
-    dispatch(setCurrentUser(data.name));
-    return res;
+  try {
+    const res = await csrfFetch("https://ireporter-th6z.onrender.com/current_user");
+
+    if (res.ok) {
+      const { token, user } = await res.json();
+      
+      setStoredAuthToken(token);      
+      dispatch(setCurrentUser(user));
+      return user;
+    } else {
+      const errorData = await res.json();
+      console.error('Session failed:', res.status, res.statusText, errorData);
+      
+      setStoredAuthToken(null);
+      dispatch(removeCurrentUser());
+      return null;
+    }
+    
+  } catch (error) {
+    console.error('Session restore error:', error);
+    
+  }
 };
+
 
 const initialState = { 
   user: JSON.parse(localStorage.getItem("currentUser"))

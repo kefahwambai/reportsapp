@@ -1,16 +1,20 @@
-export default async function csrfFetch(url, options = {}) {
-  options.headers = options.headers || {};
-  options.method = options.method || 'GET';
+const csrfFetch = async (url, options) => {
+  
+  const jwtToken = localStorage.getItem('jwtToken');
 
-  if (options.method.toUpperCase() !== 'GET') {
-    options.headers['Content-Type'] = 'application/json';
-    // Use sessionStorage token if available, otherwise use the meta tag token
-    options.headers['X-CSRF-Token'] = sessionStorage.getItem('X-CSRF-Token') || document.querySelector('meta[name="csrf-token"]')
-  }
+  
+  const headers = {
+    ...options.headers,
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${jwtToken}`,
+  };
 
-  const res = await fetch(url, options);
-  if (res.status >= 400) throw res;
-  return res;
+  
+  const response = await fetch(url, { ...options, headers });
 
-}
+  if (response.status >= 400) throw response;
+  
+  return response;
+};
 
+export default csrfFetch;
