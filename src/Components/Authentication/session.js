@@ -99,7 +99,7 @@ export const adminSignup = (user) => async (dispatch) => {
   }
 };
 
-export const requestPasswordReset = async (email) => {
+export const ForgotPassword = async (email) => {
   try {
     const response = await  csrfFetch('https://ireporter-th6z.onrender.com/password_resets', {
       method: 'POST',
