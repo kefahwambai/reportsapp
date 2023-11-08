@@ -1,6 +1,6 @@
 const csrfFetch = async (url, options) => {
   const jwtToken = localStorage.getItem('jwtToken');
-  console.log('JWT Token:', jwtToken);
+  
 
   const headers = {
     ...options.headers,

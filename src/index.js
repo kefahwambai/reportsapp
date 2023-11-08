@@ -8,13 +8,11 @@ import configureStore from './Components/Authentication';
 import * as sessionActions from './Components/Authentication/session';
 import { QueryParamProvider } from 'use-query-params';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
-import { createRoot } from 'react-dom/client';
 
 const store = configureStore();
 
 const renderApplication = () => {
-  const root = createRoot(document.getElementById('root'));
-  root.render(
+  ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter>
@@ -23,15 +21,16 @@ const renderApplication = () => {
           </QueryParamProvider>
         </BrowserRouter>
       </Provider>
-    </React.StrictMode>
+    </React.StrictMode>,
+    document.getElementById('root')
   );
 };
 
 try {
-  const response = await store.dispatch(sessionActions.restoreSession()).then(renderApplication);;
-  renderApplication();
+  // Assuming sessionActions.restoreSession is asynchronous
+  store.dispatch(sessionActions.restoreSession()).then(() => {
+    renderApplication();
+  });
 } catch (error) {
   console.error('Error fetching session data:', error);
-  
 }
-
