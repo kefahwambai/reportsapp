@@ -24,7 +24,7 @@ export const login = (user) => async (dispatch) => {
       },
     };
 
-    const res = await csrfFetch('https://ireporter-th6z.onrender.com/login', {
+    const res = await csrfFetch('http://localhost:3000/login', {
       method: 'POST',
       body: JSON.stringify(requestData),
       headers: {
@@ -71,7 +71,7 @@ export const signup = (user) => async (dispatch) => {
       id_number: user.id_number,      
     },
   };
-  const res = await  csrfFetch('https://ireporter-th6z.onrender.com/signup', {
+  const res = await  csrfFetch('http://localhost:3000/signup', {
     method: "POST",
     body: JSON.stringify(requestData)
   });
@@ -98,7 +98,7 @@ export const adminSignup = (user) => async (dispatch) => {
       admin: user.admin,
     },
   };
-  const res = await  csrfFetch('https://ireporter-th6z.onrender.com/signup', {
+  const res = await  csrfFetch('http://localhost:3000/signup', {
     method: "POST",
     body: JSON.stringify(requestData)
   });
@@ -123,7 +123,7 @@ export const ForgotPassword = async (user) => {
         email: user.email,      
       },
     };
-    const response = await  csrfFetch('https://ireporter-th6z.onrender.com/password_resets', {
+    const response = await  csrfFetch('http://localhost:3000/password_resets', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ export const ForgotPassword = async (user) => {
 
 export const restoreSession = () => async (dispatch) => {
   try {
-    const res = await csrfFetch("https://ireporter-th6z.onrender.com/current_user");
+    const res = await csrfFetch("http://localhost:3000/current_user");
 
     if (res.ok) {
       const { token, user } = await res.json();
