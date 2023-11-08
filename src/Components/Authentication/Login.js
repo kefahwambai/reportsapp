@@ -19,31 +19,25 @@ function Login({ setUser }) {
   const sessionUser = useSelector(state => state.session.user);
 
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-  
-    try {
-      const response = await dispatch(sessionActions.login({ email, password }));
-      
-      console.log(response)
-      if (response) {        
-        if (response.admin === true) {
-          setMessage("Login Successful");          
-          navigate('/admin');
-       
-      } else {
-        setMessage("Login Successful");        
-        navigate('/home');
-       
-      }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    return dispatch(sessionActions.login({ email, password }))    
+    .catch(async (res) => {
+      const data = await res.json();
+      if (res.admin === true) {
+        setMessage("Login Successful");          
+        navigate('/admin');       
+    } else {
+      setMessage("Login Successful");        
+      navigate('/home');       
     }
-  
-  } catch (error) {
-    console.error('Error parsing JSON:', error);
-   
-   
-  }
-};
+      if (data && data.errors){
+        loginError(data.errors);
+      }
+    });
+
+  };
   
      
 

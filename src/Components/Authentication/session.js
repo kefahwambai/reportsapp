@@ -34,7 +34,7 @@ export const login = (user) => async (dispatch) => {
 
     if (res.ok) {
       const { token, user } = await res.json();
-      // Store the JWT token in local storage or cookies
+      
       setStoredAuthToken(token);
       dispatch(setCurrentUser(user));
       return user;
