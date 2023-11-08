@@ -1,5 +1,6 @@
 import csrfFetch from "../Authentication/csfr";
 import { getStoredAuthToken, setStoredAuthToken } from './authUtils';
+import { useNavigate, Link } from 'react-router-dom';
 
 
 const SET_CURRENT_USER = 'session/SET_CURRENT_USER';
@@ -17,10 +18,15 @@ const removeCurrentUser = () => ({
 
 export const login = (user) => async (dispatch) => {
   try {
-    const { email, password } = user;
+    const requestData = {
+      user: {        
+        email: user.email,
+        password: user.password,            
+      },
+    };
     const res = await  csrfFetch('https://ireporter-th6z.onrender.com/login', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(requestData),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -52,37 +58,13 @@ export const logout = () => (dispatch) => {
 };
 
 export const signup = (user) => async (dispatch) => {
-  const { name, email, password, passwordConfirmation, id_number  } = user;
-  const res = await  csrfFetch('https://ireporter-th6z.onrender.com/signup', {
-    method: "POST",
-    body: JSON.stringify({
-      name,
-      email,
-      password,
-      passwordConfirmation,
-      id_number      
-    })
-  });
-  if (res.ok) {
-    console.log("Response status:", res.status);
-
-    return res;
-  } else {
-    const errorData = await res.json();
-    console.error('Signup failed:', res.status, res.statusText, errorData);
-    throw Error(`Signup failed: ${errorData.message}`);
-  }
-};
-
-export const adminSignup = (user) => async (dispatch) => {
   const requestData = {
     user: {
       name: user.name,
       email: user.email,
       password: user.password,
       passwordConfirmation: user.passwordConfirmation,
-      id_number: user.id_number,
-      admin: user.admin,
+      id_number: user.id_number,      
     },
   };
   const res = await  csrfFetch('https://ireporter-th6z.onrender.com/signup', {
@@ -100,14 +82,49 @@ export const adminSignup = (user) => async (dispatch) => {
   }
 };
 
-export const ForgotPassword = async (email) => {
+export const adminSignup = (user) => async (dispatch) => {
+  const navigate = useNavigate();
+  const requestData = {
+    user: {
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      passwordConfirmation: user.passwordConfirmation,
+      id_number: user.id_number,
+      admin: user.admin,
+    },
+  };
+  const res = await  csrfFetch('https://ireporter-th6z.onrender.com/signup', {
+    method: "POST",
+    body: JSON.stringify(requestData)
+  });
+  if (res.ok) {
+    console.log("Response status:", res.status);
+    setTimeout(() => {
+      navigate('/login'); 
+    }, 123);
+
+    return res;
+  } else {
+    const errorData = await res.json();
+    console.error('Signup failed:', res.status, res.statusText, errorData);
+    throw Error(`Signup failed: ${errorData.message}`);
+  }
+};
+
+export const ForgotPassword = async (user) => {
   try {
+    const requestData = {
+      user: {        
+        email: user.email,      
+      },
+    };
     const response = await  csrfFetch('https://ireporter-th6z.onrender.com/password_resets', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify(requestData),
     });
 
     if (response.ok) {
