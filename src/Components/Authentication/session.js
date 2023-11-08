@@ -19,34 +19,47 @@ const removeCurrentUser = () => ({
 export const login = (user) => async (dispatch) => {
   try {
     const requestData = {
-      user: {        
+      user: {
         email: user.email,
-        password: user.password,            
+        password: user.password,
       },
     };
-    const res = await  csrfFetch('https://ireporter-th6z.onrender.com/login', {
+    const res = await csrfFetch('https://ireporter-th6z.onrender.com/login', {
       method: 'POST',
       body: JSON.stringify(requestData),
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    console.log('Login response:', res);
+
     if (res.ok) {
-      const { token, user } = await res.json();      
+      const responseData = await res.json();
+      const { token, user } = responseData;
+      
       setStoredAuthToken(token);
       dispatch(setCurrentUser(user));
       return user;
     } else {
+      
       const errorData = await res.json();
       console.error('Login failed:', res.status, res.statusText, errorData);
-      throw new Error(`Login failed: ${errorData.message}`);
+
+     
+      if (errorData instanceof Blob) {
+        
+        const text = await errorData.text();
+        console.error('Non-JSON response:', text);
+        throw new Error(`Login failed: ${text}`);
+      } else {
+        throw new Error(`Login failed: ${errorData.message}`);
+      }
     }
   } catch (error) {
     console.error('Login error:', error);
     throw error;
   }
 };
+
 
 
 export const logout = () => (dispatch) => {
