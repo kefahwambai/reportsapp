@@ -16,8 +16,7 @@ const removeCurrentUser = () => ({
 });
 
 
-export const login = (user) => async (dispatch) => {
-  try {
+export const login = (user) => async (dispatch) => {  
     const requestData = {
       user: {
         email: user.email,
@@ -29,37 +28,21 @@ export const login = (user) => async (dispatch) => {
       body: JSON.stringify(requestData),
       headers: {
         'Content-Type': 'application/json',
+        Accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
       },
     });
 
     console.log('Login response:', res);
-
     if (res.ok) {
-      const responseData = await res.json();
-      const { token, user } = responseData;
-      
-      setStoredAuthToken(token);
-      dispatch(setCurrentUser(user));
-      return user;
+      console.log("Response status:", res.status);
+  
+      return res;
     } else {
-     
       const errorData = await res.json();
       console.error('Login failed:', res.status, res.statusText, errorData);
-
-      
-      if (errorData instanceof Blob) {
-       
-        const text = await errorData.text();
-        console.error('Non-JSON response:', text);
-        throw new Error(`Login failed: ${text}`);
-      } else {
-        throw new Error(`Login failed: ${errorData.message}`);
-      }
+      throw Error(`Login failed: ${errorData.message}`);
     }
-  } catch (error) {
-    console.error('Login error:', error);
-    throw error;
-  }
 };
 
 
