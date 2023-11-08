@@ -37,8 +37,7 @@ function Login({ setUser }) {
       } else {
         
         const errorData = await response.json();
-        console.error('Login failed:', response.status, response.statusText, errorData);
-       
+        console.error('Login failed:', response.status, response.statusText, errorData);       
         setLoginError(`Login failed: ${errorData.message}`);
       }
     } catch (error) {
