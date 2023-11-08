@@ -20,26 +20,31 @@ function Login({ setUser }) {
 
 
   const handleSubmit = async (event) => {
-    event.preventDefault();  
+    event.preventDefault();
     try {
       const response = await dispatch(sessionActions.login({ email, password }));
       console.log(response);
-    
+
       if (response.ok) {
-        // Handle successful login
+        
+        if (response.admin === true) {
+          setMessage('Login Successful');
+          navigate('/admin');
+        } else {
+          setMessage('Login Successful');
+          navigate('/home');
+        }
       } else {
-        // Log the error response
+        
         const errorData = await response.json();
         console.error('Login failed:', response.status, response.statusText, errorData);
-        // Show an error message
+       
         setLoginError(`Login failed: ${errorData.message}`);
       }
     } catch (error) {
       console.error('Error parsing JSON:', error);
     }
   };
-    
-
   
   
      
