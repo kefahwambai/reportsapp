@@ -1,8 +1,7 @@
 export const getStoredAuthToken = () => {
-    return localStorage.getItem('jwtToken');
+  return window.sessionStorage.getItem('jwt');
 };
-  
+
 export const setStoredAuthToken = (token) => {
-  localStorage.setItem('jwtToken', token);
+  window.sessionStorage.setItem('jwt', token);
 };
-  

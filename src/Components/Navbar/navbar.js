@@ -7,43 +7,24 @@ import * as sessionActions from "../Authentication/session";
 import Alert from '@mui/material/Alert';
 
 
-function Navbar() {
+function Navbar({user, setUser}) {
   const [message, setMessage] = useState('');
   const [loginError, setLoginError] = useState('')
   const navigate = useNavigate(); 
-  const dispatch = useDispatch();
-  const sessionUser = useSelector((state) => state.session.user);
-  const user = sessionUser ? sessionUser.id : '';
-
-
+ 
   
-
-  const handleLogoutClick = async (event) => {
-    event.preventDefault();
-  
-    try {
-      const response = await dispatch(sessionActions.logout());
-  
-      if (response) {
-        setMessage("Logout Successful!");
-        navigate('/');
-      }
-    } catch (error) {
-      console.error('Logout error:', error);
-      if (error instanceof Error) {
-        try {
-          const data = await error.json();
-          if (data && data.errors) {
-            setLoginError(data.errors);
-           
+function handleLogoutClick() {
+      fetch('https://ireporter-th6z.onrender.com/logout', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        }, }).then((r) => {
+          if (r.ok) {
+            setUser(null);
+            navigate('/');
           }
-        } catch (error) {
-          console.error('Error parsing JSON:', error);
-          
-        }
+        });
       }
-    }
-  };
   
   
     

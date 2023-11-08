@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -21,7 +21,7 @@ import * as sessionActions from "./session";
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function SignUp({ setCurrUSer}) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,32 +30,87 @@ export default function SignUp() {
   const [signupError, setSignupError] = useState('');
   const navigate = useNavigate();
   const [message, setMessage] = useState('')
-  const sessionUser = useSelector(state => state.session.user);
+ 
   const [showPassword, setShowPassword] = useState('');
   const dispatch = useDispatch();
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')
+
  
   
 
-  const handleSubmit = async (e) => {
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   if (password !== passwordConfirmation) {
+  //     setSignupError("Password and confirmation do not match.");
+  //     return;
+  //   }
+
+  //   return dispatch(sessionActions.signup({ name, email, password, passwordConfirmation, id_number }))    
+  //   .catch(async (res) => {
+  //     const data = await res.json();
+  //     setMessage('Account Created')
+  //     setTimeout(() => {
+  //       navigate('/login'); 
+  //     }, 5678);
+  //     if (data && data.errors){
+  //       signupError(data.errors);
+  //     }
+  //   });
+
+  // };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (password !== passwordConfirmation) {
-      setSignupError("Password and confirmation do not match.");
+      setSignupError('Password and confirmation do not match.');
       return;
     }
 
-    return dispatch(sessionActions.signup({ name, email, password, passwordConfirmation, id_number }))    
-    .catch(async (res) => {
-      const data = await res.json();
-      setMessage('Account Created')
-      setTimeout(() => {
-        navigate('/login'); 
-      }, 5678);
-      if (data && data.errors){
-        signupError(data.errors);
-      }
-    });
+   
+    if (id_number.length !== 8) {
+      setSignupError('ID number must be 8 digits long.');
+      return;
+    }
 
+    const formData = {
+      user: {
+        name: name,
+        email: email,
+        password: password,
+        passwordConfirmation: passwordConfirmation,
+        id_number: id_number,
+      },
+    };
+
+    
+    
+    const response = fetch('https://ireporter-th6z.onrender.com/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "accept": "application/json"        
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        localStorage.setItem('token', response.headers.get("Authorization"))
+        if (user) {          
+                    
+          setMessage('Account Created');
+          setTimeout(() => {
+            navigate('/login');
+          }, 1234);
+        } else {
+          setSignupError(user.error);
+        }
+      })
+      .catch((error) => {
+        setSignupError('Signup failed');
+        console.error(error);
+      });
   };
 
  

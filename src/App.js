@@ -13,33 +13,24 @@ import { useSelector } from "react-redux";
 import ForgotPassword from "./Components/Authentication/ForgotPassword";
 
 function App() {
-  const sessionUser = useSelector((state) => state.session.user);  
+  // const sessionUser = useSelector((state) => state.session.user);  
+  const [user, setUser] = useState(null);
 
   return (
     <div>
-        <Navbar />
-        <Routes>
-            <Route path="/" element={<Header />} />            
-            {sessionUser ? (
-          <>
+            
+        <Navbar user={user} setUser={setUser} />
+        <Routes>          
+            <Route path="/home" element={<Home user={user} />} />
             <Route path="/reports" element={<Complaints />} />
-            <Route path="/admin" element={<AdminHome />} /> 
-            <Route path="/home" element={<Home  />} />     
-            
-          </>
-        ) : (
-          <>
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/adminsignup" element={<AdminSignUp />} />
-            <Route path="/forgotpassword" element={<ForgotPassword/>} />
-          </>
-        )}
-            
-            
+            <Route path="/admin" element={<AdminHome user={user} />} />      
+            <Route path="/" element={<Header />} />
+            <Route path="/signup" element={<SignUp setUser={setUser} />} />
+            <Route path="/login" element={<Login setUser={setUser} />} />
+            <Route path="/adminsignup" element={<AdminSignUp setUser={setUser} />} />
         
         </Routes>
-        <Footer />      
+        <Footer /> 
     </div>
   );
 }

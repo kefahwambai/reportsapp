@@ -21,7 +21,7 @@ import * as sessionActions from "./session";
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function AdminSignUp() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,27 +36,60 @@ export default function SignUp() {
   const dispatch = useDispatch();
  
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (password !== passwordConfirmation) {
-      setSignupError("Password and confirmation do not match.");
+      setSignupError('Password and confirmation do not match.');
       return;
     }
 
-    return dispatch(sessionActions.adminSignup({ name, email, password, passwordConfirmation, id_number, admin }))    
-    .catch(async (res) => {
-      const data = await res.json();
-      setMessage('Account Created')
-      setTimeout(() => {
-        navigate('/login'); 
-      }, 5678);
-      if (data && data.errors){
-        signupError(data.errors);
-      }
-    });
+   
+    if (id_number.length !== 8) {
+      setSignupError('ID number must be 8 digits long.');
+      return;
+    }
 
+    const formData = {
+      user: {
+        name: name,
+        email: email,
+        password: password,
+        passwordConfirmation: passwordConfirmation,
+        id_number: id_number,
+        admin: admin,
+      },
+    };
+
+    
+    
+    const response = fetch('https://ireporter-th6z.onrender.com/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "accept": "application/json"        
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        localStorage.setItem('token', response.headers.get("Authorization"))
+        if (user) {          
+                    
+          setMessage('Account Created');
+          setTimeout(() => {
+            navigate('/login');
+          }, 1234);
+        } else {
+          setSignupError(user.error);
+        }
+      })
+      .catch((error) => {
+        setSignupError('Signup failed');
+        console.error(error);
+      });
   };
+
 
   const handleChange = (e) => {
     setAdmin(e.target.value);

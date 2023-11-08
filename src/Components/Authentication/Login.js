@@ -18,33 +18,51 @@ function Login({ setUser }) {
   const [showPassword, setShowPassword] = React.useState(false); 
   const sessionUser = useSelector(state => state.session.user);
 
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    try {
-      const response = await dispatch(sessionActions.login({ email, password }));
-      console.log(response);
-
-      if (response.ok) {
-        
-        if (response.admin === true) {
-          setMessage('Login Successful');
-          navigate('/admin');
-        } else {
-          setMessage('Login Successful');
-          navigate('/home');
-        }
-      } else {
-        
-        const errorData = await response.json();
-        console.error('Login failed:', response.status, response.statusText, errorData);       
-        setLoginError(`Login failed: ${errorData.message}`);
-      }
-    } catch (error) {
-      console.error('Error parsing JSON:', error);
-    }
-  };
   
+    const formData = {
+      user: {
+        email: email,
+        password: password,
+      },
+    };
+  
+    const response = fetch('https://ireporter-th6z.onrender.com/login', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: "Bearer" + localStorage.getItem("token")
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((res) => {
+        if (res.ok) {
+          // Successful response
+          return res.json();
+        } else {
+          // Handle the error response here and set the error message
+          throw new Error('Login failed. Please check your credentials.');
+        }
+      })
+      .then((user) => {
+        
+        if (user.admin === true) {
+          setMessage("Login Successful");
+          setUser(user);
+          navigate('/admin');
+        } else if (user) {
+          setUser(user);
+          navigate('/home');
+        } else {
+          console.log('User data is missing in the response.');
+        }
+      })
+      .catch((error) => {
+        setLoginError(error.message); // Set error message here
+        console.log('Error:', error);
+      });
+  }
   
      
 

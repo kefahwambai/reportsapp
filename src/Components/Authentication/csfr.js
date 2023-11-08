@@ -1,6 +1,5 @@
 const csrfFetch = async (url, options) => {
-  const jwtToken = localStorage.getItem('jwtToken');
-  
+  const jwtToken = window.sessionStorage.getItem('jwt');
 
   const headers = {
     ...options.headers,
@@ -11,9 +10,9 @@ const csrfFetch = async (url, options) => {
   const response = await fetch(url, { ...options, headers });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({})); 
+    const errorData = await response.json().catch(() => ({}));
     const errorMessage = errorData.message || 'Request failed with no error message.';
-    
+
     throw new Error(errorMessage);
   }
 
