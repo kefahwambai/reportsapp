@@ -27,11 +27,11 @@ export const login = (user) => async (dispatch) => {
     const res = await  csrfFetch('https://ireporter-th6z.onrender.com/login', {
       method: 'POST',
       body: JSON.stringify(requestData),
-      // headers: {
-      //   'Content-Type': 'application/json',
-      // },
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-
+    console.log('Login response:', res);
     if (res.ok) {
       const { token, user } = await res.json();
       
