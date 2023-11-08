@@ -22,21 +22,23 @@ function Login({ setUser }) {
   const handleSubmit = async (event) => {
     event.preventDefault();  
     try {
-      const response = await dispatch(sessionActions.login({ email, password }));      
-      console.log(response)
-      if (response) {        
-        if (response.admin === true) {
-          setMessage("Login Successful");          
-          navigate('/admin');       
+      const response = await dispatch(sessionActions.login({ email, password }));
+      console.log(response);
+    
+      if (response.ok) {
+        // Handle successful login
       } else {
-        setMessage("Login Successful");        
-        navigate('/home');       
+        // Log the error response
+        const errorData = await response.json();
+        console.error('Login failed:', response.status, response.statusText, errorData);
+        // Show an error message
+        setLoginError(`Login failed: ${errorData.message}`);
       }
-    }  
-  } catch (error) {
-    console.error('Error parsing JSON:', error);      
-  }
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+    }
   };
+    
 
   
   
