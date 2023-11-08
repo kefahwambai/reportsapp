@@ -23,26 +23,32 @@ export const login = (user) => async (dispatch) => {
         password: user.password,
       },
     };
+
+    const jwtToken = getStoredAuthToken(); 
+    if (!jwtToken) {
+      throw new Error("JWT Token not found"); 
+    }
+
     const res = await csrfFetch('https://ireporter-th6z.onrender.com/login', {
       method: 'POST',
       body: JSON.stringify(requestData),
       headers: {
         'Content-Type': 'application/json',
         Accept: "application/json",
-        Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     });
 
     console.log('Login response:', res);
     if (res.ok) {
       console.log("Response status:", res.status);
-  
       return res;
-    } else {
+    }  else {
       const errorData = await res.json();
       console.error('Login failed:', res.status, res.statusText, errorData);
       throw Error(`Login failed: ${errorData.message}`);
     }
+    
 };
 
 
