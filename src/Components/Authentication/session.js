@@ -33,8 +33,7 @@ export const login = (user) => async (dispatch) => {
     });
     console.log('Login response:', res);
     if (res.ok) {
-      const { token, user } = await res.json();
-      
+      const { token, user } = await res.json();      
       setStoredAuthToken(token);
       dispatch(setCurrentUser(user));
       return user;
