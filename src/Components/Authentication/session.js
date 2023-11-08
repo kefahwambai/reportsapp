@@ -32,6 +32,8 @@ export const login = (user) => async (dispatch) => {
       },
     });
 
+    console.log('Login response:', res);
+
     if (res.ok) {
       const responseData = await res.json();
       const { token, user } = responseData;
@@ -40,13 +42,13 @@ export const login = (user) => async (dispatch) => {
       dispatch(setCurrentUser(user));
       return user;
     } else {
-      
+     
       const errorData = await res.json();
       console.error('Login failed:', res.status, res.statusText, errorData);
 
-     
+      
       if (errorData instanceof Blob) {
-        
+       
         const text = await errorData.text();
         console.error('Non-JSON response:', text);
         throw new Error(`Login failed: ${text}`);
