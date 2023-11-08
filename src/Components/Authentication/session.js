@@ -1,6 +1,6 @@
 import csrfFetch from "../Authentication/csfr";
 import { getStoredAuthToken, setStoredAuthToken } from './authUtils';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 const SET_CURRENT_USER = 'session/SET_CURRENT_USER';
@@ -24,24 +24,25 @@ export const login = (user) => async (dispatch) => {
       },
     };
 
-    const jwtToken = getStoredAuthToken(); 
-    if (!jwtToken) {
-      throw new Error("JWT Token not found"); 
-    }
-
     const res = await csrfFetch('https://ireporter-th6z.onrender.com/login', {
       method: 'POST',
       body: JSON.stringify(requestData),
       headers: {
         'Content-Type': 'application/json',
         Accept: "application/json",
-        Authorization: `Bearer ${jwtToken}`,
+       
       },
     });
-
     console.log('Login response:', res);
     if (res.ok) {
       console.log("Response status:", res.status);
+      const data = await res.json();
+      const jwtToken = data.token;
+      setStoredAuthToken(jwtToken); // Set the token
+      console.log('JWT Token set:', jwtToken);
+  
+      console.log('Login response:', res);
+      console.log('Response status:', res.status);
       return res;
     }  else {
       const errorData = await res.json();
