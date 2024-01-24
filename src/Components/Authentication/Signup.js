@@ -14,14 +14,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
-import { useDispatch, useSelector } from "react-redux";
-import * as sessionActions from "./session";
-
-
 
 const defaultTheme = createTheme();
 
-export default function SignUp({ setCurrUSer}) {
+export default function SignUp({setUser}) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,34 +27,9 @@ export default function SignUp({ setCurrUSer}) {
   const navigate = useNavigate();
   const [message, setMessage] = useState('')
  
-  const [showPassword, setShowPassword] = useState('');
-  const dispatch = useDispatch();
-  const csrfToken = document.querySelector('meta[name="csrf-token"]')
-
  
-  
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   if (password !== passwordConfirmation) {
-  //     setSignupError("Password and confirmation do not match.");
-  //     return;
-  //   }
-
-  //   return dispatch(sessionActions.signup({ name, email, password, passwordConfirmation, id_number }))    
-  //   .catch(async (res) => {
-  //     const data = await res.json();
-  //     setMessage('Account Created')
-  //     setTimeout(() => {
-  //       navigate('/login'); 
-  //     }, 5678);
-  //     if (data && data.errors){
-  //       signupError(data.errors);
-  //     }
-  //   });
-
-  // };
+  const [showPassword, setShowPassword] = useState('');
+  // const csrfToken = document.querySelector('meta[name="csrf-token"]')
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -67,7 +38,6 @@ export default function SignUp({ setCurrUSer}) {
       setSignupError('Password and confirmation do not match.');
       return;
     }
-
    
     if (id_number.length !== 8) {
       setSignupError('ID number must be 8 digits long.');
@@ -97,7 +67,7 @@ export default function SignUp({ setCurrUSer}) {
       .then((response) => response.json())
       .then((user) => {
         localStorage.setItem('token', response.headers.get("Authorization"))
-        if (user) {          
+        if (user) {              
                     
           setMessage('Account Created');
           setTimeout(() => {

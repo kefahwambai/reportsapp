@@ -1,39 +1,55 @@
 // import React, { useState } from 'react';
 // import { Card, Form, Button, Alert } from "react-bootstrap";
 // import { Link, useNavigate} from "react-router-dom"
-// import { useDispatch, useSelector } from "react-redux";
-// import * as sessionActions from "./session";
-
 
 
 // function ForgotPassword() { 
   
 //   const [email, setEmail] = useState("");
-//   const [loginError, setLoginError] = useState("");
-//   const navigate = useNavigate();
-//   const dispatch = useDispatch();
+//   const [forgotPasswordError, setForgotPasswordError] = useState("");
+//   const navigate = useNavigate();  
 //   const [message, setMessage] = useState("")
  
 
-//   // const handleSubmit = async (event) => {
-//   //   event.preventDefault();
-  
-//   //   try {
-//   //     await dispatch(sessionActions.ForgotPassword({ email  }));
-//   //     setMessage("Check your Email for further Instructions.")
-//   //     setTimeout(() => {
-//   //       navigate('/login'); 
-//   //     }, 1234);      
-      
-//   //   } catch (error) {
-//   //     if (error instanceof Error) {
-//   //       const data = await error.json();
-//   //       if (data && data.errors) {
-//   //         setLoginError(data.errors);
-//   //       }
-//   //     }
-//   //   }
-//   // };
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+
+
+//     const formData = {
+//       user: {
+       
+//         email: email,       
+//       },
+//     };
+
+    
+    
+//     const response = fetch('https://ireporter-th6z.onrender.com/signup', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         "accept": "application/json"        
+//       },
+//       body: JSON.stringify(formData),
+//     })
+//       .then((response) => response.json())
+//       .then((user) => {
+//         localStorage.setItem('token', response.headers.get("Authorization"))
+//         if (user) {          
+                    
+//           setMessage('Logout Successful');
+//           setTimeout(() => {
+//             navigate('/');
+//           }, 1234);
+//         } else {
+//             setForgotPasswordError(user.error);
+//         }
+//       })
+//       .catch((error) => {
+//         setForgotPasswordError('Signup failed');
+//         console.error(error);
+//       });
+//   };
 
  
 
@@ -43,7 +59,7 @@
 //         <Card.Body className='mx-auto'>
 //           <h2 className='text-center mb-4'>Password Reset</h2>
 //           <Form type="sumit" onSubmit={handleSubmit}>
-//              {loginError && <Alert variant="danger" className="SignupError">{loginError}</Alert>}
+//              {forgotPasswordError && <Alert variant="danger" className="SignupError">{forgotPasswordError}</Alert>}
 //              {message && <Alert variant="success">{message}</Alert>}
 //             <Form.Group id="email">
 //               <Form.Label>Email</Form.Label>

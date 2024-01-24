@@ -1,0 +1,25 @@
+.logobar {
+    width: 100%;
+    background-color: oldlace;
+    height: 6rem;
+    /* display: flex; */
+    /* align-items: center;  */
+    /* padding: 0 30px;  */
+}
+
+.logobar a {
+    text-decoration: none;
+    color: black;
+}
+
+
+.logo {
+    height: 5rem;
+    padding: 0 40px;  
+    margin: 9px; 
+}
+
+.logotxt {
+    font-size: 40px;
+    font-weight: 800;
+}

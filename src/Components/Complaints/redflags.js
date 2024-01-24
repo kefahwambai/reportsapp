@@ -5,15 +5,16 @@ import { useSelector } from "react-redux";
 
 
 
-function Redflags() {
+function Redflags({user, setUser}) {
 
   const [ title, setTitle ] = useState('');
   const [ location, setLocation] = useState('');
   const [ description, setDescription] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const sessionUser = useSelector((state) => state.session.user);
-  const user = sessionUser ? sessionUser.id : '';
+  const token = localStorage.getItem('token');
+
+
 
   function handleSubmit(event) {
     event.preventDefault();   
@@ -29,8 +30,11 @@ function Redflags() {
   
     console.log(formData);
   
-    fetch('https://ireporter-th6z.onrender.com/redflags', {
+    fetch('http://localhost:3000/redflags', {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formData,
     })
       .then((res) => res.json())

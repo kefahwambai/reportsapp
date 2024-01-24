@@ -1,58 +1,63 @@
-nav{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
-    background-color:darkgrey;
-
+.navbar {
+  width: 100%;
+  background-color: rgb(229, 230, 224);
+  height: 3rem;
 
 }
 
-nav ul {
-    list-style: none;
-    width: 100%;
-    text-align: center;
-    padding-right: 60px;
-    justify-content: center;
-}
-
-nav ul li {
-    display: inline-block;
-    margin: 10px 20px;
-    
-}
-
-nav ul li a {
-    color:black;
-    text-decoration: none;
-    transition: all 0.1s ease;
+.navbar ul {
+  list-style: none;
+  display: inline-block;
+  padding: 0 85px;
 
 }
 
-nav ul li a:hover {
-    font-size: 1.15rem;
-    color: red;
-}
-
-.btnn {
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    border: 0;
-    outline: 0;
-    border-radius: 8px;
-    text-decoration: none;
-    color:black;
-    font-weight: 300;
-    cursor:pointer;
-    margin-right: 10px;
-    transition: box-shadow 0.3s ease; 
-}
-
-.btnn:hover {
-  background-color: royalblue;
-  color:aliceblue;
+.navbar ul li {
+  display: inline-flex;
+  padding: 28px 30px;
+  padding-top: 10px;
+  margin-top: 0;
+  height: 2rem; 
   
 }
 
+.navbar ul li:hover {
+  background-color: rgb(194, 189, 174);
+  border-bottom: 2px solid rgb(241, 12, 12); 
+}
+
+.navbar ul li a {
+  color: black;
+  text-decoration: none;
+  
+}
+@media (max-width: 768px) {
+  .navbar .navul {
+    flex-direction: column;
+    background-color: darkslateblue;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    display: none; 
+  }
+
+  .navbar.collapsed .navul {
+    display: none; 
+  }
+
+  .navbar.expanded .navul {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+  }
+
+  .toggle-button {
+    display: block;
+  }
+}
+
+  

@@ -15,13 +15,11 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import { useDispatch, useSelector } from "react-redux";
-import * as sessionActions from "./session";
-
 
 
 const defaultTheme = createTheme();
 
-export default function AdminSignUp() {
+export default function AdminSignUp({ setUser }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

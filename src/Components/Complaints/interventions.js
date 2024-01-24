@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./intervention.css";
 import Alert from "@mui/material/Alert";
-import { useSelector } from "react-redux";
 
 
 
-function Intervention() {
+
+function Intervention({ user, setUser}) {
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
@@ -14,8 +14,8 @@ function Intervention() {
   const [image, setImage] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState(''); 
-  const sessionUser = useSelector((state) => state.session.user);
-  const user = sessionUser ? sessionUser.id : '';
+  const token = localStorage.getItem('token');
+
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -30,12 +30,15 @@ function Intervention() {
     formData.append('location', location);
     formData.append('description', description);
     formData.append('image', image);
-    formData.append('user_id', user)
+    // formData.append('user_id', user)
   
     console.log(formData);
   
-    fetch('https://ireporter-th6z.onrender.com/interventions', {
+    fetch('http://localhost:3000/interventions', {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formData,
     })
       .then((res) => res.json())
@@ -49,10 +52,9 @@ function Intervention() {
   }  
 
   useEffect(() => {
-    fetch("https://ireporter-th6z.onrender.com/government_agencies")
+    fetch("http://localhost:3000/government_agencies")
       .then((response) => response.json())
       .then((agencies) => {
-        // Ensure agencies is an array before setting it
         if (Array.isArray(agencies)) {
           setAgencies(agencies);
         } else {

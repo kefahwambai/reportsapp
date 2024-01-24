@@ -4,35 +4,56 @@ import Alert from '@mui/material/Alert';
 import './admin.css';
 import { useSelector } from "react-redux";
 
-function AdminHome() {
+function AdminHome({user, setUser}) {
   const [issues, setIssues] = useState([]);
   const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const sessionUser = useSelector((state) => state.session.user);
-  
+  const [error, setError] = useState(''); 
   const [showDescription, setShowDescription] = useState(false);
   const [currentDescription, setCurrentDescription] = useState('');
   const [selectedIssue, setSelectedIssue] = useState(null);
 
+
   useEffect(() => {
-    if (sessionUser) {
-      
-      Promise.all([
-        fetch(`https://ireporter-th6z.onrender.com/redflags`),
-        fetch(`https://ireporter-th6z.onrender.com/interventions`),
-      ])
-        .then(([redflagsResponse, interventionsResponse]) =>
-          Promise.all([redflagsResponse.json(), interventionsResponse.json()])
-        )
-        .then(([redflags, interventions]) => {
-          // Ensure redflags and interventions are arrays
-          if (!Array.isArray(redflags)) {
-            redflags = [];
+    const token = localStorage.getItem('token');
+
+    const fetchUserAndIssues = async () => {
+      try {
+        const userResponse = await fetch('http://localhost:3000/me', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (userResponse.ok) {
+          const fetchedUser = await userResponse.json();
+          console.log('Current user:', fetchedUser);
+
+          setUser(fetchedUser);
+
+          const [redflagsResponse, interventionsResponse] = await Promise.all([
+            fetch('http://localhost:3000/users/redflags', {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
+            fetch('http://localhost:3000/users/interventions', {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
+          ]);
+
+          let redflags = [];
+          let interventions = [];
+
+          if (redflagsResponse.ok) {
+            redflags = await redflagsResponse.json();
           }
-          if (!Array.isArray(interventions)) {
-            interventions = [];
+
+          if (interventionsResponse.ok) {
+            interventions = await interventionsResponse.json();
           }
-  
+
           const redflagsWithType = redflags.map((redflag) => ({
             ...redflag,
             type: 'redflag',
@@ -41,17 +62,20 @@ function AdminHome() {
             ...intervention,
             type: 'intervention',
           }));
-  
+
           const allIssues = [...redflagsWithType, ...interventionsWithType];
           setIssues(allIssues);
-        })
-        .catch((error) => {
-          setError(error);
-          console.error('Error fetching issues:', error);
-        });
-    }
-  }, [sessionUser]);
-  
+        } else {
+          console.error('Error fetching current user');
+        }
+      } catch (error) {
+        console.error('Error fetching user and issues:', error);
+        setError('Error fetching user and issues');
+      }
+    };
+
+    fetchUserAndIssues();
+  }, [user, setUser]);
 
   const handleEdit = (issue) => {
     setSelectedIssue(issue);
@@ -109,7 +133,7 @@ function AdminHome() {
     <div>
       <div className="adminhmepage">
         <div className="adminhmepgecontent">
-          <h1>Welcome {sessionUser ? sessionUser.name : 'Guest'}</h1>
+          <h1>Welcome {user ? user.name : 'Guest'}</h1>
         </div>
         <div className="admindatatable">
           <table className="admintable table-hover">

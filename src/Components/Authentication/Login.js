@@ -1,10 +1,8 @@
 import './Login.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
-import { useDispatch, useSelector } from "react-redux";
-import * as sessionActions from "./session";
 
 
 function Login({ setUser }) {
@@ -13,58 +11,47 @@ function Login({ setUser }) {
   const navigate = useNavigate(); 
   const [message, setMessage] = useState('');
   const [loginError, setLoginError] = useState('');
-  const dispatch = useDispatch();
-  const [rememberMe, setRememberMe] = React.useState(false);
-  const [showPassword, setShowPassword] = React.useState(false); 
-  const sessionUser = useSelector(state => state.session.user);
 
-  const handleSubmit = (event) => {
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     const formData = {
-      user: {
-        email: email,
-        password: password,
-      },
+      email: email,
+      password: password,
     };
-  
-    const response = fetch('https://ireporter-th6z.onrender.com/login', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: "Bearer" + localStorage.getItem("token")
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((res) => {
-        if (res.ok) {
-          // Successful response
-          return res.json();
-        } else {
-          // Handle the error response here and set the error message
-          throw new Error('Login failed. Please check your credentials.');
-        }
-      })
-      .then((user) => {
-        
-        if (user.admin === true) {
-          setMessage("Login Successful");
-          setUser(user);
-          navigate('/admin');
-        } else if (user) {
-          setUser(user);
-          navigate('/home');
-        } else {
-          console.log('User data is missing in the response.');
-        }
-      })
-      .catch((error) => {
-        setLoginError(error.message); // Set error message here
-        console.log('Error:', error);
+
+    try {
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
-  }
-  
-     
+
+      if (response.ok) {
+        const userData = await response.json();
+        const token = userData.token;
+        sessionStorage.setItem('jwt', token);
+
+        if (userData.admin === true) {
+          setMessage('Login Successful');
+          setUser(userData);
+          navigate('/admin');
+        } else if (userData.admin === false) {
+          setUser(userData);
+          navigate('/home');
+        }
+      } else {
+        const errorData = await response.json();
+        setLoginError(errorData.error);
+      }
+    } catch (error) {
+      setLoginError('Login failed');
+      console.error(error);
+    }
+  };
 
   return (
     <div className="testlog">

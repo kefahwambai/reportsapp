@@ -2,26 +2,23 @@ import React, { useState,  useEffect } from 'react';
 import "./Home.css";
 import { Link } from "react-router-dom";
 import Alert from "@mui/material/Alert";
-import { useSelector } from "react-redux";
 
 
 
-function Home() {
+function Home({user, setUser}) {
   const [issues, setIssues] = useState([]);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('')
-  const sessionUser = useSelector((state) => state.session.user);
-  const user = sessionUser ? sessionUser.id : '';
 
-  
+
   useEffect(() => {
     if (user) {
-      // Fetch redflags for the user
-      fetch(`https://ireporter-th6z.onrender.com/users/${user.id}/redflags`)
+
+      fetch(`http://localhost:3000/users/${user.id}/redflags`)
         .then((response) => response.json())
         .then((redflags) => {
           
-          fetch(`https://ireporter-th6z.onrender.com/users/${user.id}/interventions`)
+          fetch(`http://localhost:3000/users/${user.id}/interventions`)
             .then((response) => response.json())
             .then((interventions) => {
               
@@ -41,15 +38,15 @@ function Home() {
   }, [user]);
 
   const handleEdit = (issueId) => {
-    // Implement the logic to open an edit form and populate it with the issue's data.
-    // When the user submits the form, send a PUT request to update the record.
+
+
   };
 
   const handleDelete = (issueId) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this record?');
 
     if (confirmDelete) {
-      fetch(`https://ireporter-th6z.onrender.com/redflags/${issueId}`, {
+      fetch(`http://localhost:3000/redflags/${issueId}`, {
         method: 'DELETE',
       })
         .then((response) => {
