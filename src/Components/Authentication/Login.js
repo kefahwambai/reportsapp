@@ -32,14 +32,15 @@ function Login({ setUser }) {
 
       if (response.ok) {
         const userData = await response.json();
+        console.log(userData)
         const token = userData.token;
         sessionStorage.setItem('jwt', token);
 
-        if (userData.admin === true) {
+        if (userData && userData.user.admin === true) {
           setMessage('Login Successful');
           setUser(userData);
           navigate('/admin');
-        } else if (userData.admin === false) {
+        } else if (userData && userData.user.admin === false) {
           setUser(userData);
           navigate('/home');
         }
@@ -91,7 +92,6 @@ function Login({ setUser }) {
         </div>
       </div>
 
-      {/* Submit button */}
       <button type="submit" className="btn btn-primary btn-block" onClick={handleSubmit}>Login</button>
     </form>
     </div>

@@ -17,35 +17,41 @@ function Redflags({user, setUser}) {
 
 
   function handleSubmit(event) {
-    event.preventDefault();   
-    console.log(location);
-  
-    const formData = new FormData();
+    event.preventDefault();
   
     
-    formData.append('title', title);
-    formData.append('location', location);
-    formData.append('description', description);    
-    formData.append('user_id', user)
   
-    console.log(formData);
+    if (user && user.user && user.user.id) {
+      console.log(user);
+      console.log(user.user.id)
+      const formData = new FormData();
   
-    fetch('http://localhost:3000/redflags', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setMessage('Case Reported');
+      formData.append('title', title);
+      formData.append('location', location);
+      formData.append('description', description);
+      formData.append('user_id', user.user.id);
+  
+     
+      fetch('http://localhost:3000/redflags', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
       })
-      .catch((err) => {        
-        setError(err.message);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setMessage('Case Reported');
+        })
+        .catch((err) => {
+          setError(err.message);
+        });
+    } else {
+      console.error('User information is not available or user ID is missing.');
+    }
   }
+  
 
 
   return (

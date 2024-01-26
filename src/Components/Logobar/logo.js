@@ -10,7 +10,7 @@ function Logo() {
   return (
       <div>
           <nav className='logobar'>
-            <a href="http:localhost:3000/">
+            <a href="/">
              <img
                 className='logo'
                 src={logo}

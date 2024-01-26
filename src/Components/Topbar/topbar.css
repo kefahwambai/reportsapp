@@ -39,14 +39,13 @@
     
 }
 
-@media only screen and (max-width: 600px) {
+@media  (max-width: 600px) {
     .topclass {
-        flex-direction: column; 
-        text-align: center; 
+        text-align: center;         
     }
 
-    .topclass ul li {
-        display: block; 
-        margin: 5px 0; 
+    .topclass ul li {            
+        font-size: 0.9rem;
+        margin: 6px;
     }
 }

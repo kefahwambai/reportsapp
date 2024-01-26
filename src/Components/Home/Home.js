@@ -10,20 +10,21 @@ function Home({user, setUser}) {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('')
 
-
   useEffect(() => {
-    if (user) {
-
-      fetch(`http://localhost:3000/users/${user.id}/redflags`)
+    const storedToken = sessionStorage.getItem('jwt');
+   
+  
+    if (user && user.user && user.user.id) {
+      const userId = user.user.id;
+      
+  
+      fetch(`http://localhost:3000/users/${userId}/redflags`)
         .then((response) => response.json())
         .then((redflags) => {
-          
-          fetch(`http://localhost:3000/users/${user.id}/interventions`)
+          fetch(`http://localhost:3000/users/${userId}/interventions`)
             .then((response) => response.json())
             .then((interventions) => {
-              
               const allIssues = [...redflags, ...interventions];
-              
               setIssues(allIssues);
             })
             .catch((error) => {
@@ -31,11 +32,12 @@ function Home({user, setUser}) {
             });
         })
         .catch((error) => {
-          setError(error)
+          setError(error);
           console.error('Error fetching redflags:', error);
         });
     }
   }, [user]);
+
 
   const handleEdit = (issueId) => {
 
@@ -66,7 +68,7 @@ function Home({user, setUser}) {
     <div>
       <div className="hmepage">
         <div className="hmepgecontent">
-        <h1>Welcome {user ? user.name : "Guest"}</h1>
+        <h1>Welcome {user ? user.user.name : "Guest"}</h1>
         </div>
         <div className="datatable">
           <table className="table table-hover">

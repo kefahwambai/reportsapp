@@ -1,5 +1,6 @@
+
 .hmepage {
-    width:100%;
+    width: 100%;
     min-height: 100vh;
     background-image: linear-gradient(rgba(65, 101, 81, 0.65), rgba(182, 118, 114, 0.65));
     background-size: cover;
@@ -10,51 +11,43 @@
 .hmepgecontent {
     margin-top: 7rem;
     color: #fff;
-    max-width: 620px; 
+    max-width: 620px;
 }
 
 .datatable {
     width: 40%;
     float: right;
-   
     border-radius: 10px;
     background: white;
     border: 1px solid #ccc;
     padding: 25px;
-    box-shadow: 0 28px 19px rgba(0, 0, 0, 0.1);   
+    box-shadow: 0 28px 19px rgba(0, 0, 0, 0.1);
     z-index: 1;
 }
-
-
 
 .hmebtn {
     display: flex;
     align-items: center;
-    /* margin-top: 14rem; */
     margin-top: 17rem;
     padding: 0.65rem;
     background-color: red;
-    border-radius: 8px;    
+    border-radius: 8px;
     text-decoration: none;
-    color:whitesmoke;
-    cursor:pointer;
-    transition: box-shadow 0.1s ease; 
+    color: whitesmoke;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
 }
 
 .hmebtn:hover {
     box-shadow: 0 18px 19px rgba(0, 0, 0, 0.1);
-    
-    margin-right: 10px;
-
 }
 
 .hmpgebtn {
-    
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .hmpgebtn:hover {
@@ -63,34 +56,24 @@
 }
 
 
-table {
-    z-index: 0;
-}
-
 @media (max-width: 700px) {
     .hmepgecontent {
-      margin-top: 4rem;
-      max-width: 90%; 
-      
-    }
-  
-    .datatable {
-      width: 100%;
-      float: none; 
-      margin: 0 auto; 
-      border-radius: 10px;
-      background: white;
-      border: 1px solid #ccc;
-      padding: 10px;
-      box-shadow: 0 28px 19px rgba(0, 0, 0, 0.1);
-      z-index: 1;
+        margin-top: 4rem;
+        max-width: 90%;
     }
 
-    .tabler th {
-             
-        border-radius: 1px;
-        background: white;      
+    .datatable {
+        width: 100%;
+        float: none;
+        margin: 0 auto;
+        border-radius: 10px;
+        background: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        box-shadow: 0 28px 19px rgba(0, 0, 0, 0.1);
+        z-index: 1;
     }
+
     .tr {
         display: flex;
         flex-wrap: wrap;
@@ -100,43 +83,27 @@ table {
         margin: 5px 0;
         padding: 10px;
     }
-      
-    
+
     .tr td {
-        width: 33%; /* Each cell takes up one-third of the available space */
+        width: 100%;
         padding: 5px;
         text-align: center;
     }
-      
-    
-    .tr td button {
-        display: block;
-        margin: 5px;
-        padding: 5px 10px;
-    }     
-      
-    .hmpgebtn {
-        padding: 8px 16px; 
-       font-size: 14px;    
 
-    } 
-  
     .hmebtn {
-      display: flex;
-      align-items: center;
-      margin-top: 4rem; /* Adjust the top margin for better spacing */
-      padding: 0.65rem;
-      background-color: red;
-      border-radius: 8px;
-      text-decoration: none;
-      color: whitesmoke;
-      cursor: pointer;
-      transition: box-shadow 0.1s ease;
+        display: flex;
+        align-items: center;
+        margin-top: 4rem;
+        padding: 0.65rem;
+        background-color: red;
+        border-radius: 8px;
+        text-decoration: none;
+        color: whitesmoke;
+        cursor: pointer;
+        transition: box-shadow 0.3s ease;
     }
-  
+
     .hmebtn:hover {
-      box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1); /* Adjust the box-shadow for the hover effect */
-      margin-right: 0; /* Reset the margin-right */
+        box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
     }
-  }
-  
+}

@@ -8,9 +8,10 @@
 .navbar ul {
   list-style: none;
   display: inline-block;
-  padding: 0 85px;
-
+  padding: 0 95px; 
+  
 }
+
 
 .navbar ul li {
   display: inline-flex;
@@ -31,15 +32,71 @@
   text-decoration: none;
   
 }
-@media (max-width: 768px) {
-  .navbar .navul {
-    flex-direction: column;
-    background-color: darkslateblue;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    width: 100%;
-    display: none; 
+@media (max-width: 550px) {
+  .navbar{
+    font-size: 0.8rem;
+    /* height: 4.5rem; */
+  }
+
+  .navbar ul li {
+    padding: 10px 15px;
+    padding-top: 5px;
+    margin-top: 0;
+    height: 2rem; 
+     
+  }
+
+  .navbar ul {        
+    padding: 0 0px; 
+  }
+
+}
+
+@media (max-width: 495px){
+  .navbar{
+    font-size: 0.8rem;
+    /* height: 4.5rem; */
+  }
+
+  .navbar ul li {
+    padding: 10px 15px;
+    padding-top: 5px;
+    margin-top: 0;
+    height: 2rem; 
+     
+  }
+
+  .navbar ul {        
+    padding: 0 0px; 
+  }
+
+
+}
+
+
+
+@media (max-width: 445px) {
+  .navbar{
+    height: 4.5rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .navbar{
+
+  }
+
+  .navbar ul li {
+    padding: 10px 10px;
+    padding-top: 5px;
+    margin-top: 0;
+    height: 2rem; 
+     
+  }
+
+
+  .navbar ul {        
+    padding: 0 0px; 
   }
 
   .navbar.collapsed .navul {

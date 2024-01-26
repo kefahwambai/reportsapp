@@ -56,7 +56,7 @@ export default function SignUp({setUser}) {
 
     
     
-    const response = fetch('https://ireporter-th6z.onrender.com/signup', {
+    const response = fetch('http://localhost:3000/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
